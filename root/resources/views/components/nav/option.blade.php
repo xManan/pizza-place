@@ -1,0 +1,1 @@
+<option {{ $attributes->merge(['class' => 'bg-orange-600']) }}>{{ $slot }}</option>

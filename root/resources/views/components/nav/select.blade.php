@@ -1,0 +1,1 @@
+<select {{ $attributes->merge(['class' => 'mx-8 bg-transparent']) }}>{{$slot}}</select>
