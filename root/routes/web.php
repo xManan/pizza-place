@@ -55,7 +55,7 @@ Route::view('/offers', 'customer.offers');
 Route::view('/login', 'customer.auth.login')->name('login');
 Route::view('/checkout', 'customer.checkout');
 
-Auth::guard('customer')->login(Customer::find(1));
+// Auth::guard('customer')->login(Customer::find(1));
 Route::post('/cart', function(Request $request) {
     $request->validate([
         'itemId' => [ 'required', 'int' ]
