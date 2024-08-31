@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\CustomerAddress;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -18,21 +19,25 @@ class CustomerSeeder extends Seeder
             [
                 'first_name' => 'Test',
                 'last_name' => 'User',
-                'phone' => '919123455555',
+                'phone' => '9625219955',
                 'email' => 'test@example.com',
-                'password' => Hash::make('asdf'),
+                'password' => 'asdf',
             ],
             [
                 'first_name' => 'Test',
                 'last_name' => 'Customer',
-                'phone' => '919123466666',
+                'phone' => '9775554444',
                 'email' => 'customer@example.com',
-                'password' => Hash::make('asdf'),
+                'password' => 'asdf',
             ]
         ]);
         
         $customers->each(function($customer) {
-            Customer::factory()->create($customer)->cart()->create();
+            $cust = Customer::factory()->create($customer);
+            $cust->cart()->create();
+            CustomerAddress::factory()->create([
+                'customer_id' => $cust->id,
+            ]);
         });
     }
 }

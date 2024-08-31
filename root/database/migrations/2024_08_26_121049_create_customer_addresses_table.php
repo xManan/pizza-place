@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Cart;
-use App\Models\MenuItem;
+use App\Models\Customer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,13 +12,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cart_items', function (Blueprint $table) {
+        Schema::create('customer_addresses', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Cart::class)->onDelete('cascade');
-            $table->foreignIdFor(MenuItem::class);
-            $table->json('options');
-            $table->unsignedInteger('qty')->default(1);
-            $table->unsignedInteger('total_price');
+            $table->foreignIdFor(Customer::class);
+            $table->string('name');
+            $table->string('address1');
+            $table->string('address2');
+            $table->string('city');
+            $table->string('pincode');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cart_items');
+        Schema::dropIfExists('customer_addresses');
     }
 };

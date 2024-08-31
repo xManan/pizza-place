@@ -7,7 +7,7 @@
     <title>Pizza Place</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body x-data="{ showItemOptions: false, item: null }" x-bind:class="{ 'bg-black/5 overflow-hidden h-screen': showItemOptions, 'bg-black/5': !showItemOptions }">
+<body x-data="{ scrollOff: false, item: null }" x-bind:class="{ 'bg-black/5 overflow-hidden h-screen': scrollOff, 'bg-black/5': !scrollOff }">
     <nav class="bg-orange-500 text-2xl text-white">
         <div class="container flex justify-between mx-auto">
             <div class="flex items-center">
@@ -23,9 +23,13 @@
             </div>
             <div class="flex items-center space-x-16">
                 <x-nav.link href="/" :active="request()->is('/') or request()->is('menu/*')">Menu</x-nav.link>
-                <x-nav.link href="/offers" :active="request()->is('offers')">Offers</x-nav.link>
-                <x-nav.link href="/login" :active="request()->is('login')">Login</x-nav.link>
-                <!-- <x-nav.link href="/checkout" :active="request()->is('checkout')">Cart</x-nav.link> -->
+                <!-- <x-nav.link href="/offers" :active="request()->is('offers')">Offers</x-nav.link> -->
+                @auth('customer')
+                    <x-nav.link href="/profile" :active="request()->is('profile')">{{ Auth::guard('customer')->user()->first_name }}</x-nav.link>
+                @endauth
+                @guest('customer')
+                    <x-nav.link href="/login" :active="request()->is('login')">Login</x-nav.link>
+                @endguest
             </div>
         </div>
     </nav>

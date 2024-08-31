@@ -1,13 +1,15 @@
 <?php
 
 use App\Enums\MenuCategory;
-use App\Models\CartItem;
 use App\Models\Customer;
+use App\Models\CustomerAddress;
 use App\Models\MenuItem;
+use App\Models\Order;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\Rules\Password;
 
 Route::get('/', function() {
     $cart = collect();
@@ -53,17 +55,28 @@ Route::get('/menu/item/{id}/options', function($id) {
 
 Route::view('/offers', 'customer.offers');
 Route::view('/login', 'customer.auth.login')->name('login');
-Route::view('/checkout', 'customer.checkout');
 
-// Auth::guard('customer')->login(Customer::find(1));
+Route::get('/checkout', function(Request $request) { 
+    $user = Auth::guard('customer')->user();
+    $cart = $user->cart->items;        
+    $props = ['cart' => $cart];
+    if(isset($request['deliverTo'])) {
+        $address = CustomerAddress::find($request['deliverTo']);
+        if($address) {
+            $props['deliverTo'] = $address;
+        }
+    }
+    return view('customer.checkout', $props);
+})->middleware('auth:customer');
+
 Route::post('/cart', function(Request $request) {
     $request->validate([
-        'itemId' => [ 'required', 'int' ]
+        'item_id' => [ 'required', 'int' ]
     ]);
 
     $options = $request->options ?? [];
 
-    $item = MenuItem::with('options.values')->findOrFail($request->itemId);
+    $item = MenuItem::with('options.values')->findOrFail($request->item_id);
 
     if(!$item->options->isEmpty()) {
         $optionIds = collect($options)->flatten();
@@ -102,7 +115,7 @@ Route::post('/cart', function(Request $request) {
     return redirect('/menu/' . strtolower($item->category));
 })->middleware('auth:customer');
 
-Route::patch('/cart/item/{itemId}/qty/{action}', function($itemId, $action) {
+Route::patch('/cart/item/{itemId}/qty/{action}', function(Request $request, $itemId, $action) {
     $user = Auth::guard('customer')->user();
     $cartItem = $user->cart->items()->findOrFail($itemId);
     $cart = $cartItem->cart;
@@ -114,5 +127,112 @@ Route::patch('/cart/item/{itemId}/qty/{action}', function($itemId, $action) {
             $cartItem->delete();
         }
     }
-    return view('components.cart', [ 'cart' => $cart->items ]);
+    return view('components.cart', [ 'cart' => $cart->items, 'isCheckout' => boolval($request->get('checkout')) ]);
 })->middleware('auth:customer');
+
+Route::post('/login', function(Request $request) {
+    $credentials = $request->validate([
+        'phone' => ['required', 'regex:/[0-9]{10}/'],
+        'password' => ['required'],
+    ]);
+    
+    if (Auth::guard('customer')->attempt($credentials)) {
+        $request->session()->regenerate();
+
+        return redirect()->intended('/');
+    }
+
+    return back()->withErrors([
+        'phone' => 'The provided credentials do not match our records.',
+    ])->onlyInput('phone');
+});
+
+Route::post('/logout', function(Request $request) {
+    Auth::guard('customer')->logout();
+
+    return redirect('/');
+})->middleware('auth:customer');
+
+Route::get('/forgot-password', function() {
+    return view('customer.auth.forgot-password');
+});
+
+Route::get('/register', function() {
+    return view('customer.auth.register');
+});
+
+Route::post('/register', function(Request $request) {
+    $inputs = $request->validate([
+        'first_name' => [ 'required' ],
+        'last_name' => [ 'required' ],
+        'phone' => [ 'required', 'regex:/[0-9]+/', 'unique:customers,phone' ],
+        'email' => [ 'required', 'email', 'unique:customers,email' ],
+        'password' => [ 'required', Password::default(), 'confirmed' ],
+    ]);
+    
+    $user = Customer::create($inputs);
+    $user->cart()->create();
+
+    Auth::guard('customer')->login($user);
+
+    return redirect('/');
+});
+
+Route::get('/profile', function() {
+    return view('customer.profile');
+})->middleware('auth:customer');
+
+Route::post('/customer/address', function (Request $request) {
+    $inputs = $request->validate([
+        'name' => 'required',
+        'address1' => 'required',
+        'address2' => 'required',
+        'city' => 'required',
+        'pincode' => 'required',
+    ]);
+    
+    /** @var \App\Models\User $user */
+    $user = Auth::guard('customer')->user();
+
+    $user->addresses()->create($inputs);
+
+    return back();
+});
+
+Route::post('/order', function (Request $request) {
+    /** @var \App\Models\User $user */
+    $user = Auth::guard('customer')->user();
+    $items = $user->cart->items;
+    if($items->isEmpty()) {
+        return redirect('/');
+    }
+    $order = $user->orders()->create();
+    $totalAmount = 0;
+    foreach($items as $item) {
+        $order->items()->create([
+            'menu_item_id' => $item->menu_item_id,
+            'options' => json_encode($item->options),
+            'qty' => $item->qty,
+            'total_price' => $item->total_price,
+        ]);
+        $totalAmount += $item->total_price * $item->qty;
+    }
+    $gst = $totalAmount * env('GST_PERC', 0) / 100;
+    $deliveryFee = env('DELIVERY_FEE', 0);
+    $netTotal = $totalAmount + $gst + $deliveryFee;
+
+    $order->gst = $gst;
+    $order->delivery_fee = $deliveryFee;
+    $order->net_total = $netTotal;
+    $order->save();
+
+    $user->cart->items()->delete();
+    return redirect('/order/' . $order->id . '?success=true');
+});
+
+Route::get('/order/{id}', function(Request $request, $id) {
+    /** @var \App\Models\User $user */
+    $user = Auth::guard('customer')->user();
+    $order = $user->orders()->findOrFail($id);
+    return view('customer.order', [ 'order' => $order ]);
+});

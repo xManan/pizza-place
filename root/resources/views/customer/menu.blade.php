@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="container mx-auto px-16 mb-32">
+    <x-container>
         <div class="flex gap-16 text-orange-500 text-xl py-4">
             <x-nav.link href="/menu/pizzas" :active="request()->is('/') or request()->is('menu/pizzas')">Pizzas</x-nav.link>
             <x-nav.link href="/menu/pastas" :active="request()->is('menu/pastas')">Pastas</x-nav.link>
@@ -16,5 +16,5 @@
         </div>
         <div id="menu-item-options-container">
         </div>
-    </div>
+    </x-container>
 </x-layout>

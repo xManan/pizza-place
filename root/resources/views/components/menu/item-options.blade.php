@@ -19,14 +19,14 @@
             }
         }
     </script>
-    <div class="fixed top-0 left-0 z-10 w-full h-full bg-black/25" x-on:click="document.getElementById('menu-item-options').remove();showItemOptions=false;">
+    <div class="fixed top-0 left-0 z-10 w-full h-full bg-black/25" x-on:click="document.getElementById('menu-item-options').remove();scrollOff=false;">
     <div x-on:click="$event.stopPropagation();" class="fixed min-w-96 border-2 border-orange-500 bg-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg p-4">
         <form action="/cart" method="POST">
             @csrf
             <h2 class="text-2xl font-bold">{{ $item->name }} ({{ 'Rs. ' . $item->base_price / 100 }})</h2>
             <hr>
             <div>
-                <input class="hidden" id="item-id" name="itemId" type="text" value="{{ $item->id }}" />
+                <input class="hidden" id="item-id" name="item_id" type="text" value="{{ $item->id }}" />
                 @foreach ($options as $option)
                     <x-menu.item-options-group group="{{ $option['label'] }}">
                         @foreach ($option['values'] as $value)
@@ -68,7 +68,7 @@
             <div class="text-right mt-4">
                 <span 
                     class="py-2 px-4 rounded-lg border cursor-pointer" 
-                    x-on:click="document.getElementById('menu-item-options').remove();showItemOptions=false;"
+                    x-on:click="document.getElementById('menu-item-options').remove();scrollOff=false;"
                 >
                     Cancel
                 </span>
