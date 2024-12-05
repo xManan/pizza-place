@@ -15,13 +15,6 @@ trait EnumValid {
     }
 
     public static function isNotValid(string $value): bool {
-        $valid = false;
-        foreach (self::cases() as $case) {
-            if ($case->value === $value) {
-                $valid = true;
-                break;
-            }
-        }
-        return !$valid;
+        return !self::isValid($value);
     }
 }

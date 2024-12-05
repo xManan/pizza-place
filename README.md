@@ -7,3 +7,11 @@
 <img src="ss/2024-09-05_20-50_2.png" />
 <img src="ss/2024-09-05_20-52.png" />
 <img src="ss/2024-09-05_20-52_1.png" />
+
+## Run
+
+```bash
+git clone https://github.com/xManan/pizza-place.git
+cd pizza-place/root
+npm run dev
+php artisan serve
