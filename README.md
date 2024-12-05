@@ -13,5 +13,7 @@
 ```bash
 git clone https://github.com/xManan/pizza-place.git
 cd pizza-place/root
+npm i
 npm run dev
+composer i
 php artisan serve
