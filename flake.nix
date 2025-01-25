@@ -15,7 +15,7 @@
 			pkgs.mkShell
 			{
 				buildInputs = [
-					pkgs.php
+					pkgs.php83
 					pkgs.php83Packages.composer
 					pkgs.nodejs_22
 				];

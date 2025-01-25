@@ -13,7 +13,11 @@
 ```bash
 git clone https://github.com/xManan/pizza-place.git
 cd pizza-place/root
+composer i
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+php artisan serve
 npm i
 npm run dev
-composer i
-php artisan serve
