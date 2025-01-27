@@ -40,7 +40,7 @@
                 <div class="bg-white shadow-lg rounded-lg p-6 border border-gray-200">
                 <div class="flex items-center justify-between border-b border-gray-200 pb-4 mb-4">
                     <h3 class="text-xl font-semibold text-gray-800">Order ID: #{{ $order->id }}</h3>
-                    <a href="/order/{{ $order->id }}" class="text-orange-600 hover:text-orange-800 font-semibold">View Details</a>
+                    <a href="{{ url('/order/' . $order->id) }}" class="text-orange-600 hover:text-orange-800 font-semibold">View Details</a>
                 </div>
 
                 <div class="flex flex-col space-y-4">

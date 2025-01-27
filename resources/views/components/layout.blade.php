@@ -11,7 +11,7 @@
     <nav class="bg-orange-500 text-2xl text-white">
         <div class="container flex justify-between mx-auto">
             <div class="flex items-center">
-                <a href="/" class="flex items-center">
+                <a href="{{ url('/') }}" class="flex items-center">
                     <img src="{{ Vite::asset('resources/images/logo.png') }}" alt="LOGO" class="w-32">
                     <h2 class="text-4xl">Pizza Place</h2>
                 </a>
@@ -21,14 +21,14 @@
                     <x-nav.option value="sonipat">Sonipat</x-nav.option>
                 </x-nav.select> -->
             </div>
-            <div class="flex items-center space-x-16">
-                <x-nav.link href="/" :active="request()->is('/') or request()->is('menu/*')">Menu</x-nav.link>
-                <!-- <x-nav.link href="/offers" :active="request()->is('offers')">Offers</x-nav.link> -->
+            <div class="flex items-center space-x-16 mr-8">
+                <x-nav.link href="{{ url('/') }}" :active="request()->is('/') or request()->is('menu/*')">Menu</x-nav.link>
+                <!-- <x-nav.link href="{{ url('/offers') }}" :active="request()->is('offers')">Offers</x-nav.link> -->
                 @auth('customer')
-                    <x-nav.link href="/profile" :active="request()->is('profile')">{{ Auth::guard('customer')->user()->first_name }}</x-nav.link>
+                    <x-nav.link href="{{ url('/profile') }}" :active="request()->is('profile')">{{ Auth::guard('customer')->user()->first_name }}</x-nav.link>
                 @endauth
                 @guest('customer')
-                    <x-nav.link href="/login" :active="request()->is('login')">Login</x-nav.link>
+                    <x-nav.link href="{{ url('/login') }}" :active="request()->is('login')">Login</x-nav.link>
                 @endguest
             </div>
         </div>

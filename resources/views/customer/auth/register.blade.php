@@ -4,7 +4,7 @@
           <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 class="mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Create an account</h2>
           </div>
-        
+
           <div class="mt-0 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" action="/register" method="POST">
                 @csrf
@@ -29,7 +29,7 @@
                     <x-form.label for="email">Email Address</x-form.label>
                     <x-form.input id="email" name="email" type="text" value="{{ old('email') }}" autocomplete="email" required />
                 </div>
-        
+
                 <div>
                     <x-form.label for="password">Password</x-form.label>
                     <x-form.input id="password" name="password" type="password" autocomplete="current-password" required />
@@ -39,15 +39,15 @@
                     <x-form.label for="password">Confirm Password</x-form.label>
                     <x-form.input id="password" name="password_confirmation" type="password" autocomplete="current-password" required />
                 </div>
-        
+
                 <div>
                     <x-form.button class="text-white">Register</x-form.button>
                 </div>
             </form>
-        
+
             <p class="mt-10 text-center text-sm text-gray-500">
                 Already registered?
-                <x-form.link href="/login">Login</x-form.link>
+                <x-form.link href="{{ url('/login') }}">Login</x-form.link>
             </p>
           </div>
         </div>

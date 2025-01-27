@@ -4,7 +4,7 @@
         <span class="font-bold  text-xs">{{ $cartItem->menuItem->name }}</span>
         <span class="text-xs text-gray-500">{{ $cartItem->optionValues()->pluck('label')->implode(' | ') }}</span>
     </div>
-    <div class="flex space-x-4">
+    <div class="flex ">
         <x-quantity-btn :id="$cartItem->id" :isCheckout="$isCheckout" :deliverTo="$deliverTo">{{ $cartItem->qty }}</x-quantity-btn>
         <span class="font-bold text-xs min-w-16 text-right">Rs. {{ ($cartItem->qty * $cartItem->total_price) / 100 }}</span>
     </div>

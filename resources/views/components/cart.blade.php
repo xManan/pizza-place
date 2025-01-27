@@ -59,7 +59,7 @@
                     </div>
                     <hr>
                     <br>
-                    <a href="/checkout" class="bg-orange-500 text-white px-8 py-2 rounded-lg">Checkout</a>
+                    <a href="{{ url('/checkout') }}" class="bg-orange-500 text-white px-8 py-2 rounded-lg">Checkout</a>
                 @endif
         @endif
     </div>
