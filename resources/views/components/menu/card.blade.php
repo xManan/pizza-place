@@ -20,7 +20,7 @@
         @else
             <x-add-to-cart-btn
                 x-on:click="scrollOff=true"
-                hx-get="{{ url('/menu/item/' . $item->id) }}/options"
+                hx-get="{{ url('/menu/item/' . $item->id . /options') }}"
                 hx-target="#menu-item-options-container"
                 hx-swap="innerHTML"
             >
