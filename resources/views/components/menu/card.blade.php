@@ -12,13 +12,13 @@
     <div class="flex justify-between items-center mt-4 mt-auto">
         <span class="font-bold text-xl">Rs. {{ $item->base_price / 100 }}</span>
         @if($item->options->isEmpty())
-            <form action="/cart" method="POST">
+            <form action="{{ url('/cart') }}" method="POST">
                 @csrf
                 <input type="text" class="hidden" name="item_id" value="{{ $item->id }}">
                 <x-add-to-cart-btn>Add to Cart</x-add-to-cart-btn>
             </form>
         @else
-            <x-add-to-cart-btn 
+            <x-add-to-cart-btn
                 x-on:click="scrollOff=true"
                 hx-get="/menu/item/{{ $item->id }}/options"
                 hx-target="#menu-item-options-container"

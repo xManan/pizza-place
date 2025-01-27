@@ -1,11 +1,11 @@
 <div id="menu-item-options" x-data="menuItemOptionsInit">
     <script>
         function menuItemOptionsInit() {
-            return { 
+            return {
                 totalPrice: "{{ $item->base_price }}",
                 handleItemOptionClick(ele) {
                     let basePrice = parseInt("{{ $item->base_price }}")
-                    
+
                     let opts = document.querySelectorAll('.menu-item-option')
                     console.log(opts[0].getAttribute('price'))
                     opts.forEach(el => {
@@ -13,7 +13,7 @@
                             basePrice += parseInt(el.getAttribute('price'))
                         }
                     })
-    
+
                     this.totalPrice = basePrice
                 }
             }
@@ -21,7 +21,7 @@
     </script>
     <div class="fixed top-0 left-0 z-10 w-full h-full bg-black/25" x-on:click="document.getElementById('menu-item-options').remove();scrollOff=false;">
     <div x-on:click="$event.stopPropagation();" class="fixed min-w-96 border-2 border-orange-500 bg-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg p-4">
-        <form action="/cart" method="POST">
+        <form action="{{ url('/cart') }}" method="POST">
             @csrf
             <h2 class="text-2xl font-bold">{{ $item->name }} ({{ 'Rs. ' . $item->base_price / 100 }})</h2>
             <hr>
@@ -31,26 +31,26 @@
                     <x-menu.item-options-group group="{{ $option['label'] }}">
                         @foreach ($option['values'] as $value)
                             @if($value['is_default'])
-                                <x-menu.item-option 
-                                    id="{{ $value['value'] }}" 
-                                    name="{{ 'options[' . $option['name'] . ']' . ($option['is_multiselect'] ? '[]' : '') }}" 
+                                <x-menu.item-option
+                                    id="{{ $value['value'] }}"
+                                    name="{{ 'options[' . $option['name'] . ']' . ($option['is_multiselect'] ? '[]' : '') }}"
                                     class="menu-item-option"
-                                    value="{{ $value['id'] }}" 
+                                    value="{{ $value['id'] }}"
                                     type="{{ $option['is_multiselect'] ? 'checkbox' : 'radio' }}"
                                     x-on:click="handleItemOptionClick"
                                     checked=true
-                                    label="{{ $value['label'] }}" 
+                                    label="{{ $value['label'] }}"
                                     price="{{ $value['price'] }}"
                                 />
                             @else
-                                <x-menu.item-option 
-                                    id="{{ $value['value'] }}" 
-                                    name="{{ 'options[' . $option['name'] . ']' . ($option['is_multiselect'] ? '[]' : '') }}" 
+                                <x-menu.item-option
+                                    id="{{ $value['value'] }}"
+                                    name="{{ 'options[' . $option['name'] . ']' . ($option['is_multiselect'] ? '[]' : '') }}"
                                     class="menu-item-option"
-                                    value="{{ $value['id'] }}" 
+                                    value="{{ $value['id'] }}"
                                     type="{{ $option['is_multiselect'] ? 'checkbox' : 'radio' }}"
                                     x-on:click="handleItemOptionClick"
-                                    label="{{ $value['label'] }}" 
+                                    label="{{ $value['label'] }}"
                                     price="{{ $value['price'] }}"
                                 />
                             @endif
@@ -66,8 +66,8 @@
             </div>
             <hr>
             <div class="text-right mt-4">
-                <span 
-                    class="py-2 px-4 rounded-lg border cursor-pointer" 
+                <span
+                    class="py-2 px-4 rounded-lg border cursor-pointer"
                     x-on:click="document.getElementById('menu-item-options').remove();scrollOff=false;"
                 >
                     Cancel

@@ -25,7 +25,7 @@
                 </dl>
             </div>
             <div class="mt-10">
-                <form action="/logout" method="POST" class="max-w-32">
+                <form action={{ url('/logout') }} method="POST" class="max-w-32">
                     @csrf
                     <x-form.button class="text-white">Logout</x-form.button>
                 </form>

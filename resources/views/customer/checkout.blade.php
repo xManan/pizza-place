@@ -5,7 +5,7 @@
     <x-container x-data="{showAddAddressModal: false}">
         <div>
             <x-modal id="add-address-modal" x-show="showAddAddressModal">
-                <form class="space-y-4" action="/customer/address" method="POST"> 
+                <form class="space-y-4" action="{{ url('/customer/address') }}" method="POST">
                     @csrf
                     <div>
                         <x-form.label for="name">Name</x-form.label>
@@ -41,7 +41,7 @@
                             Delivery address
                         </h2>
                         <div class="mt-4">
-                            <strong>{{ $deliverTo->name }}</strong>                        
+                            <strong>{{ $deliverTo->name }}</strong>
                             <p>{{ $deliverTo->address1 }}</p>
                             <p>{{ $deliverTo->address2 }}</p>
                             <p>{{ $deliverTo->city }}</p>
@@ -72,7 +72,7 @@
                                     <label for="upi">UPI</label>
                                 </div>
                                 <div x-show="paymentOption=='upi'">
-                                    <input type="text" placeholder="example@bank" class="border" /> 
+                                    <input type="text" placeholder="example@bank" class="border" />
                                     <button class="border">Verify</button>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                             </div>
                         @endforeach
                         <div class="relative bg-white min-h-64 p-4 border-2 text-orange-500">
-                            <x-form.button 
+                            <x-form.button
                                 class="absolute bottom-1/2 left-1/2 translate-y-1/2 -translate-x-1/2 max-w-36 bg-white border-2 border-orange-500 text-orange-500 hover:text-white"
                                 x-on:click="showAddAddressModal=true;scrollOff=true"
                             >

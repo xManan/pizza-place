@@ -45,7 +45,7 @@
                         <br>
                     </div>
                     @if(!empty(request()->get('deliverTo')))
-                        <form action="/order" method="POST">
+                        <form action="{{ url('/order') }}" method="POST">
                             @csrf
                             <input type="text" class="hidden" name="address_id" value="{{ request()->get('deliverTo') }}"/>
                             <x-form.button class="text-white">Place Order</x-form.button>
