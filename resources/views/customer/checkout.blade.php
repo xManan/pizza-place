@@ -46,7 +46,7 @@
                             <p>{{ $deliverTo->address2 }}</p>
                             <p>{{ $deliverTo->city }}</p>
                             <p>{{ $deliverTo->pincode }}</p>
-                            <a href="/checkout" class="text-orange-500 hover:underline">change</a>
+                            <a href="{{ url('/checkout') }}" class="text-orange-500 hover:underline">change</a>
                         </div>
                     </div>
                     <div class="bg-white p-4" x-data="paymentOptionInit">
@@ -106,7 +106,7 @@
                                 <p>{{ $address->address3 }}</p>
                                 <p>{{ $address->city }}</p>
                                 <p>{{ $address->pincode }}</p>
-                                <a href="/checkout?deliverTo={{$address->id}}"><x-form.button class="absolute bottom-8 left-1/2 -translate-x-1/2 max-w-36 text-white">Deliver Here</x-form.button></a>
+                                <a href="{{ url('/checkout?deliverTo=' . $address->id) }}"><x-form.button class="absolute bottom-8 left-1/2 -translate-x-1/2 max-w-36 text-white">Deliver Here</x-form.button></a>
                             </div>
                         @endforeach
                         <div class="relative bg-white min-h-64 p-4 border-2 text-orange-500">
